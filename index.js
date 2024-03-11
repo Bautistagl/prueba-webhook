@@ -62,22 +62,39 @@
 //     console.log('Server is listeningg on 3000')
 // })
 
-import http from 'http'
+import { App, createNodeMiddleware } from "octokit";
+import "dotenv/config";
+import express from "express";
 
-// Definir la función de manejo de solicitudes
-const requestHandler = (request, response) => {
-  // Establecer el encabezado de respuesta con el tipo de contenido
-  response.setHeader('Content-Type', 'text/plain');
-  // Escribir la respuesta
-  response.end('¡Hola, mundo!\n');
-  console.log('A VER DONDE SALE ESTO')
-};
+const ghApp = new App({
+  appId: process.env.APP_ID,
+  privateKey: process.env.PRIVATE_KEY,
+  webhooks: {
+    secret: process.env.WEBHOOK_SECRET,
+  },
+  oauth: { clientId: null, clientSecret: null },
+});
 
-// Crear un servidor HTTP y pasar la función de manejo de solicitudes
-const server = http.createServer(requestHandler);
+const app = express();
 
-// Escuchar en el puerto 3000 y la dirección localhost
+app.use(express.json());
+
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
+
+app.post('/api/github/webhooks', (req, res) => {
+  res.send('INSTALACION');
+  console.log(req.body); // Loguea el cuerpo de la solicitud
+});
+
+ghApp.webhooks.on('installation.created', async ({ octokit, payload }) => {
+  console.log(`Received a installation.created event for #${payload.installation.id}`);
+});
+
+app.use(createNodeMiddleware(ghApp));
+
 const port = process.env.PORT || 3000;
-server.listen(port, () => {
-  console.log(`Servidor corriendo en http://localhost:${port}/`);
+app.listen(port, () => {
+  console.log(`Server is listening on port ${port}`);
 });
