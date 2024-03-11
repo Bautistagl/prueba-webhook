@@ -87,6 +87,10 @@ app.post('/api/github/webhooks', (req, res) => {
   res.send('INSTALACION');
   console.log(req.body); // Loguea el cuerpo de la solicitud
 });
+app.post('/api/github/webhooks', (req, res) => {
+  res.send('ESTA ES LA PAG');
+  console.log(req.body,'ESTO ES GET'); // Loguea el cuerpo de la solicitud
+});
 
 ghApp.webhooks.on('installation.created', async ({ octokit, payload }) => {
   console.log(`Received a installation.created event for #${payload.installation.id}`);
