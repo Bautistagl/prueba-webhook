@@ -1,66 +1,4 @@
-// import express from 'express'
-// import { Octokit, App } from 'octokit'
 
-// const app = express()
-
-// app.get('/', (req,res)=>{
-//     res.send('Hello World!')
-// })
-
-// app.get('/repositorios', (req,res) => {
-//     res.send('ABOUT')
-// })
-// app.get('/api/repositorios', (req,res) => {
-//     res.send('api webhook')
-// })
-
-// app.listen(3000, () => {
-//     console.log('Server is listening on 3000')
-// })
-// import { App, createNodeMiddleware } from "octokit";
-// import "dotenv/config";
-// import express from "express";
-
-
-
-
-// const ghApp = new App({
-//   appId: process.env.APP_ID,
-//   privateKey: process.env.PRIVATE_KEY,
-//   webhooks: {
-//     secret: process.env.WEBHOOK_SECRET,
-//   },
-//   oauth: { clientId: null, clientSecret: null },
-// });
-// const app = express();
-
-
-// app.get('/', (req,res)=>{
-//     res.send('Hello World!')
-// })
-
-
-// app.post('/api/github/webhooks', (req,res)=>{
-//   res.send('INSTALACION')
-//   console.log(res,'esto es res')
-//   console.log(req,'esto es req')
-// })
-// app.get('/api/github/webhooks', (req,res)=>{
-//   res.send('INSTALACION')
-//   console.log(res,'esto es res')
-//   console.log(req,'esto es req')
-// })
-// ghApp.webhooks.on('installation.created', async ({ octokit, payload }) => {
-//   console.log(`Received a installation.created event for #${payload.installation.id}`)
-// })
-
-
-
-
-// app.use(createNodeMiddleware(ghApp));
-// app.listen(3000, () => {
-//     console.log('Server is listeningg on 3000')
-// })
 
 import { App, createNodeMiddleware } from "octokit";
 import "dotenv/config";
@@ -92,8 +30,28 @@ app.post('/api/github/webhooks', (req, res) => {
   console.log(req.body,'ESTO ES GETAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'); // Loguea el cuerpo de la solicitud
 });
 
-ghApp.webhooks.on('installation.created', async ({ octokit, payload }) => {
-  console.log(`AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAReceived a installation.created event for #${payload.installation.id}`);
+app.post('/api/github/commit', async (req, res) => {
+  // const { owner, repo, path, content, message } = req.body;
+  const owner = "Bautistagl";
+  const repo = "prueba-webhook";
+  const path = "nuevoCommit/archivo.txt";
+  const content = "Contenido del archivo en base64";
+  const message = "Mensaje del commit";
+
+  try {
+    const response = await ghApp.repos.createOrUpdateFileContents({
+      owner,
+      repo,
+      path,
+      message,
+      content: Buffer.from(content).toString('base64'),
+    });
+
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error creating or updating file:', error);
+    res.status(500).json({ error: 'Error creating or updating file' });
+  }
 });
 
 app.use(createNodeMiddleware(ghApp));
