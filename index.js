@@ -70,6 +70,7 @@ const requestHandler = (request, response) => {
   response.setHeader('Content-Type', 'text/plain');
   // Escribir la respuesta
   response.end('¡Hola, mundo!\n');
+  console.log('A VER DONDE SALE ESTO')
 };
 
 // Crear un servidor HTTP y pasar la función de manejo de solicitudes
