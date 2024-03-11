@@ -62,7 +62,7 @@
 //     console.log('Server is listeningg on 3000')
 // })
 
-import {http} from 'http'
+import http from 'http'
 
 // Definir la función de manejo de solicitudes
 const requestHandler = (request, response) => {
@@ -76,11 +76,7 @@ const requestHandler = (request, response) => {
 const server = http.createServer(requestHandler);
 
 // Escuchar en el puerto 3000 y la dirección localhost
-server.listen(3000, 'localhost', (err) => {
-  // Manejar los errores si los hay
-  if (err) {
-    return console.error('Error al iniciar el servidor:', err);
-  }
-  // Indicar que el servidor está funcionando
-  console.log('Servidor corriendo en http://localhost:3000/');
+const port = process.env.PORT || 3000;
+server.listen(port, () => {
+  console.log(`Servidor corriendo en http://localhost:${port}/`);
 });
