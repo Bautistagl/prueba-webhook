@@ -62,7 +62,7 @@
 //     console.log('Server is listeningg on 3000')
 // })
 
-import {http} from ('http')
+import {http} from 'http'
 
 // Definir la función de manejo de solicitudes
 const requestHandler = (request, response) => {
