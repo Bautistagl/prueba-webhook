@@ -25,14 +25,11 @@ app.post('/api/github/webhooks', (req, res) => {
   res.send('INSTALACION');
   console.log(req.body,'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'); // Loguea el cuerpo de la solicitud
 });
-app.post('/api/github/webhooks', (req, res) => {
-  res.send('ESTA ES LA PAG');
-  console.log(req.body,'ESTO ES GETAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'); // Loguea el cuerpo de la solicitud
-});
+
 
 app.post('/api/github/commit', async (req, res) => {
   // const { owner, repo, path, content, message } = req.body;
-  console.log(ghApp.rest,'ESTO ES EL GHAPP');
+  console.log(ghApp,'ESTO ES EL GHAPP');
   const owner = "Bautistagl";
   const repo = "prueba-webhook";
   const path = "nuevoCommit/archivo.txt";
