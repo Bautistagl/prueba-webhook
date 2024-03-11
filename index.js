@@ -32,7 +32,7 @@ app.post('/api/github/webhooks', (req, res) => {
 
 app.post('/api/github/commit', async (req, res) => {
   // const { owner, repo, path, content, message } = req.body;
-  console.log(ghApp,'ESTO ES EL GHAPP');
+  console.log(ghApp.rest,'ESTO ES EL GHAPP');
   const owner = "Bautistagl";
   const repo = "prueba-webhook";
   const path = "nuevoCommit/archivo.txt";
