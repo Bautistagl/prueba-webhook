@@ -32,6 +32,7 @@ app.post('/api/github/webhooks', (req, res) => {
 
 app.post('/api/github/commit', async (req, res) => {
   // const { owner, repo, path, content, message } = req.body;
+  console.log(ghApp);
   const owner = "Bautistagl";
   const repo = "prueba-webhook";
   const path = "nuevoCommit/archivo.txt";
