@@ -61,7 +61,7 @@
 // app.listen(3000, () => {
 //     console.log('Server is listeningg on 3000')
 // })
-const http = require('http');
+
 import {http} from ('http')
 
 // Definir la función de manejo de solicitudes
