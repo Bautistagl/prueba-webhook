@@ -39,38 +39,26 @@ app.post('/api/github/webhooks', (req, res) => {
   // Loguea el tipo de evento
   console.log('GitHub Event Type:', eventType);
   
-  // Dependiendo del tipo de evento, realiza la acción correspondiente
+  // Dependiendo del tipo de evento y acción, realiza la acción correspondiente
   switch (eventType) {
     case 'installation':
-      // Verificar si la acción es "created"
+      // Verificar la acción en el payload
       if (payload.action === 'created') {
-        console.log('Installation Created:');
+        console.log('Installation Created:', payload);
         // Aquí puedes realizar cualquier acción específica para el evento de instalación creada
-      }
-      if (payload.action === 'removed') {
-        console.log('Installation Deleted');
-        // Aquí puedes realizar cualquier acción específica para el evento de instalación creada
-      }
-      break;
-    case 'installation_repositories':
-      // Manejar el evento de instalación eliminada
-      if (payload.action === 'removed') {
-        console.log('Installation Deleted');
-        // Aquí puedes realizar cualquier acción específica para el evento de instalación creada
+      } else if (payload.action === 'deleted') {
+        console.log('Installation Deleted:', payload);
+        // Aquí puedes realizar cualquier acción específica para el evento de instalación eliminada
       }
       break;
     case 'installation_repositories':
-      // Manejar el evento de repositorios agregados a la instalación
+      // Verificar la acción en el payload
       if (payload.action === 'added') {
-        console.log('Repositorio agregado:');
-        // Aquí puedes realizar cualquier acción específica para el evento de instalación creada
-      }
-      break;
-    case 'installation_repositories':
-      // Manejar el evento de repositorios eliminados de la instalación
-      if (payload.action.repositories_removed.length > 0 ) {
-        console.log('Repositorio borrado');
-        // Aquí puedes realizar cualquier acción específica para el evento de instalación creada
+        console.log('Installation Repositories Added:', payload);
+        // Aquí puedes realizar cualquier acción específica para el evento de repositorios agregados
+      } else if (payload.action === 'removed') {
+        console.log('Installation Repositories Removed:', payload);
+        // Aquí puedes realizar cualquier acción específica para el evento de repositorios eliminados
       }
       break;
     default:
