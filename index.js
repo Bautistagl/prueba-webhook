@@ -47,6 +47,10 @@ app.post('/api/github/webhooks', (req, res) => {
         console.log('Installation Created:');
         // Aquí puedes realizar cualquier acción específica para el evento de instalación creada
       }
+      if (payload.action === 'removed') {
+        console.log('Installation Deleted');
+        // Aquí puedes realizar cualquier acción específica para el evento de instalación creada
+      }
       break;
     case 'installation_repositories':
       // Manejar el evento de instalación eliminada
