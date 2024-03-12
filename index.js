@@ -35,36 +35,25 @@ app.get('/', (req, res) => {
 app.post('/api/github/webhooks', (req, res) => {
   const eventType = req.headers['x-github-event'];
   const payload = req.body;
-
+  console.log(payload,'ESTO ES PAYLOAAAAAAAAAAAAAAAD')
   // Loguea el tipo de evento
   console.log('GitHub Event Type:', eventType);
+  if (payload.action === 'created') {
+    console.log('Installation Created:', payload);
+    // Aquí puedes realizar cualquier acción específica para el evento de instalación creada
+  } else if (payload.action === 'deleted') {
+    console.log('Installation Deleted:', payload);
+    // Aquí puedes realizar cualquier acción específica para el evento de instalación eliminada
+  }
   
-  // Dependiendo del tipo de evento y acción, realiza la acción correspondiente
-  switch (eventType) {
-    case 'installation':
-      // Verificar la acción en el payload
-      if (payload.action === 'created') {
-        console.log('Installation Created:', payload);
-        // Aquí puedes realizar cualquier acción específica para el evento de instalación creada
-      } else if (payload.action === 'deleted') {
-        console.log('Installation Deleted:', payload);
-        // Aquí puedes realizar cualquier acción específica para el evento de instalación eliminada
-      }
-      break;
-    case 'installation_repositories':
-      // Verificar la acción en el payload
-      if (payload.action === 'added') {
+  else if (payload.action === 'added') {
         console.log('Installation Repositories Added:', payload);
         // Aquí puedes realizar cualquier acción específica para el evento de repositorios agregados
       } else if (payload.action === 'removed') {
         console.log('Installation Repositories Removed:', payload);
         // Aquí puedes realizar cualquier acción específica para el evento de repositorios eliminados
       }
-      break;
-    default:
-      console.log('Unhandled GitHub Event Type:', eventType);
-      break;
-  }
+
 
   res.sendStatus(200);
 });
