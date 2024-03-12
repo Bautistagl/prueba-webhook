@@ -1,8 +1,9 @@
-
-
-import { App, createNodeMiddleware } from "octokit";
+import { App, Octokit, createNodeMiddleware } from "octokit";
 import "dotenv/config";
 import express from "express";
+import { createTokenAuth } from "@octokit/auth-token";
+
+const auth = createTokenAuth("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");
 
 const ghApp = new App({
   appId: process.env.APP_ID,
@@ -12,6 +13,16 @@ const ghApp = new App({
   },
   oauth: { clientId: null, clientSecret: null },
 });
+const octokit = new Octokit({
+  // auth: {
+  //   appId: process.env.APP_ID,
+  //   privateKey: process.env.PRIVATE_KEY,
+  //   installationId: process.env.INSTALLATION_ID,
+    
+  // },
+  auth: "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",
+});
+
 
 const app = express();
 
@@ -22,14 +33,40 @@ app.get('/', (req, res) => {
 });
 
 app.post('/api/github/webhooks', (req, res) => {
-  res.send('INSTALACION');
-  console.log(req.body,'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'); // Loguea el cuerpo de la solicitud
+  const eventType = req.headers['x-github-event'];
+  const payload = req.body;
+
+  // Loguea el tipo de evento
+  console.log('GitHub Event Type:', eventType);
+  
+  // Dependiendo del tipo de evento, realiza la acción correspondiente
+  switch (eventType) {
+    case 'installation.created':
+      // Manejar el evento de instalación creada
+      console.log('Installation Created:', payload);
+      break;
+    case 'installation.deleted':
+      // Manejar el evento de instalación eliminada
+      console.log('Installation Deleted:', payload);
+      break;
+    case 'installation_repositories.added':
+      // Manejar el evento de repositorios agregados a la instalación
+      console.log('Installation Repositories Added:', payload);
+      break;
+    case 'installation_repositories.removed':
+      // Manejar el evento de repositorios eliminados de la instalación
+      console.log('Installation Repositories Removed:', payload);
+      break;
+    default:
+      console.log('Unhandled GitHub Event Type:', eventType);
+      break;
+  }
+
+  res.sendStatus(200);
 });
 
 
 app.post('/api/github/commit', async (req, res) => {
-  // const { owner, repo, path, content, message } = req.body;
-  console.log(ghApp.AppWithDefaults,'ESTO ES EL GHAPP');
   const owner = "Bautistagl";
   const repo = "prueba-webhook";
   const path = "nuevoCommit/archivo.txt";
@@ -37,12 +74,23 @@ app.post('/api/github/commit', async (req, res) => {
   const message = "Mensaje del commit";
 
   try {
-    const response = await ghApp.repos.createOrUpdateFileContents({
+    // Obtener detalles del archivo para obtener el SHA
+    const fileInfo = await octokit.rest.repos.getContent({
+      owner,
+      repo,
+      path,
+    });
+    
+    const sha = fileInfo.data.sha;
+
+    // Crear o actualizar el archivo con el SHA proporcionado
+    const response = await octokit.rest.repos.createOrUpdateFileContents({
       owner,
       repo,
       path,
       message,
       content: Buffer.from(content).toString('base64'),
+      sha, // incluir el SHA obtenido en la solicitud
     });
 
     res.json(response.data);
