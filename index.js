@@ -44,28 +44,28 @@ app.post('/api/github/webhooks', (req, res) => {
     case 'installation':
       // Verificar si la acción es "created"
       if (payload.action === 'created') {
-        console.log('Installation Created:', payload);
+        console.log('Installation Created:');
         // Aquí puedes realizar cualquier acción específica para el evento de instalación creada
       }
       break;
     case 'installation_repositories':
       // Manejar el evento de instalación eliminada
       if (payload.action === 'removed') {
-        console.log('Installation Created:', payload);
+        console.log('Installation Deleted');
         // Aquí puedes realizar cualquier acción específica para el evento de instalación creada
       }
       break;
     case 'installation_repositories':
       // Manejar el evento de repositorios agregados a la instalación
       if (payload.action === 'added') {
-        console.log('Installation Created:', payload);
+        console.log('Repositorio agregado:');
         // Aquí puedes realizar cualquier acción específica para el evento de instalación creada
       }
       break;
     case 'installation_repositories':
       // Manejar el evento de repositorios eliminados de la instalación
       if (payload.action.repositories_removed.length > 0 ) {
-        console.log('Installation Created:', payload);
+        console.log('Repositorio borrado');
         // Aquí puedes realizar cualquier acción específica para el evento de instalación creada
       }
       break;
