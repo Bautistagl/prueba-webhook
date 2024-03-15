@@ -20,7 +20,7 @@ const octokit = new Octokit({
   //   installationId: process.env.INSTALLATION_ID,
     
   // },
-  auth: "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",
+  auth: "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",
 });
 
 
@@ -69,25 +69,32 @@ app.post('/api/github/commit', async (req, res) => {
   const path = "nuevoCommit/archivo.txt";
   const content = "Contenido del archivo en base64";
   const message = "Mensaje del commit";
+  const title = 'Pull request title';
+  const head = 'nueva-branch';
+  const base = 'main'
+  const body = 'pull body'
+  
 
   try {
     // Obtener detalles del archivo para obtener el SHA
-    const fileInfo = await octokit.rest.repos.getContent({
-      owner,
-      repo,
-      path,
-    });
+    // const fileInfo = await octokit.rest.repos.getContent({
+    //   owner,
+    //   repo,
+    //   path,
+    // });
     
-    const sha = fileInfo.data.sha;
+    // const sha = fileInfo.data.sha;
 
     // Crear o actualizar el archivo con el SHA proporcionado
-    const response = await octokit.rest.repos.createOrUpdateFileContents({
+    const response = await octokit.rest.pulls.create({
       owner,
       repo,
-      path,
-      message,
-      content: Buffer.from(content).toString('base64'),
-      sha, // incluir el SHA obtenido en la solicitud
+      title,
+      body,
+      base,
+      head,
+      // content: Buffer.from(content).toString('base64'),
+      // sha, // incluir el SHA obtenido en la solicitud
     });
 
     res.json(response.data);
