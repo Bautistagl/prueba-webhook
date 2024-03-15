@@ -32,14 +32,18 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
+app.post('/api/github/pull_request', (req, res) => {
+  res.send('Hello World!');
+});
+
 app.post('/api/github/webhooks', (req, res) => {
   const eventType = req.headers['x-github-event'];
   const payload = req.body;
-  console.log(payload,'ESTO ES PAYLOAAAAAAAAAAAAAAAD')
+
   // Loguea el tipo de evento
   console.log('GitHub Event Type:', eventType);
   if (payload.action === 'created') {
-    console.log('Installation Created:', payload);
+    console.log('Installation Created:', payload.installation.id);
     // Aquí puedes realizar cualquier acción específica para el evento de instalación creada
   } else if (payload.action === 'deleted') {
     console.log('Installation Deleted:', payload);
